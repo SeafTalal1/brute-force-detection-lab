@@ -1,2 +1,12 @@
-# brute-force-detection-lab
-Mini SOC Lab with brute force detection using Wazuh
+# Mini SOC Lab Project
+
+## Objective
+Build a mini SOC lab to simulate and detect brute force attacks.
+
+## Tools Used
+- Wazuh (SIEM)
+- Kali Linux (Attacker)
+- Windows (Victim)
+
+## Project Status
+In Progress
