@@ -1,4 +1,4 @@
-# Mini SOC Lab Project
+# Brute Force Detection Lab (Mini SOC)
 
 ## Objective
 Build a mini SOC lab to simulate and detect brute force attacks.
