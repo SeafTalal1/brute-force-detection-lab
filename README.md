@@ -111,6 +111,8 @@ Default credentials:
 * Username: admin
 * Password: generated during installation
 
+* <img width="1703" height="893" alt="image" src="https://github.com/user-attachments/assets/6bf34302-fb4f-4363-a18d-1ec5fcaa370c" />
+
 ---
 
 #### Password Reset (if needed)
@@ -140,6 +142,8 @@ ip a
 * [ ] Add Windows Agent
 * [ ] Simulate Brute Force Attack
 * [ ] Analyze Logs and Alerts
+
+<img width="1898" height="902" alt="image" src="https://github.com/user-attachments/assets/07694ee4-f9ed-4b32-aea0-70b4a38e6f8a" />
 
 ---
 
