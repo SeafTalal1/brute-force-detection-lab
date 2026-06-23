@@ -154,6 +154,7 @@ Sysmon was installed on the Windows machine to enhance system logging and provid
 
 Steps performed:
 
+#### 1. Download Sysmon
 1. Downloaded Sysmon from the official Microsoft Sysinternals website  [ https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon ]
 2. Extracted the archive  
 3. Executed Sysmon with administrator privileges  
@@ -171,6 +172,120 @@ Sysmon logs were verified using Event Viewer:
 
 The logs confirmed that Sysmon was successfully installed and actively collecting system events.
 
+### 2. Wazuh Agent Installation
+
+The Wazuh agent was installed on the Windows machine to enable log collection and communication with the Wazuh manager.
+
+Steps performed:
+
+1. Downloaded a compatible Wazuh agent version (4.7.5) to match the manager version
+2. Installed the agent using the MSI installer
+3. Configured the agent to connect to the Wazuh manager using the server IP
+
+```bash
+msiexec.exe /i wazuh-agent-4.7.5-1.msi WAZUH_MANAGER="192.168.1.9"
+```
+
+---
+
+3. Agent Registration and Authentication
+
+The agent was registered with the Wazuh manager using the automatic authentication method.
+
+Steps performed:
+
+3.1. Executed the following command on the Windows machine:
+
+```bash
+"C:\Program Files (x86)\ossec-agent\agent-auth.exe" -m 192.168.1.9
+```
+
+3.2. The agent requested and received a valid authentication key from the manager
+
+Verification:
+
+* Successful output:
+
+  ```
+  INFO: Valid key received
+  ```
+
+This confirmed that the agent was successfully authenticated and registered.
+
+---
+
+4. Starting the Wazuh Agent Service
+
+After successful registration, the agent service was restarted.
+
+```bash
+net stop WazuhSvc
+```
+
+```bash
+net start WazuhSvc
+```
+
+Verification:
+
+* The service started successfully without errors
+* The agent began communicating with the Wazuh manager
+
+---
+
+5. Agent Connectivity Verification
+
+The agent status was verified from the Wazuh dashboard.
+
+Steps performed:
+
+5.1. Navigated to:
+
+   ```
+   Wazuh Dashboard → Agents
+   ```
+
+5.2. Confirmed:
+
+   * Agent status: **Active**
+   * No disconnected or pending agents
+   * Successful communication between agent and manager
+
+![wazuh dashboard](screenshots/active_wazuh_dashboard.png)
+
+---
+
+6. Issues Encountered and Resolutions
+
+During the setup process, several issues were encountered and resolved:
+
+* **Version Mismatch**
+
+  * Issue: Agent version higher than manager
+  * Resolution: Installed compatible agent version (4.7.5)
+
+* **Time Synchronization Issue**
+
+  * Issue: Agent not becoming active
+  * Resolution: Set both systems to UTC and synchronized system time
+
+* **Duplicate Agent Name**
+
+  * Issue: Agent registration failed due to duplicate name
+  * Resolution: Removed existing agent entries from manager
+
+* **Manual Key Handling Errors**
+
+  * Issue: Errors when manually copying authentication key
+  * Resolution: Used `agent-auth` for automatic key exchange
+
+---
+
+### Outcome
+
+The Windows endpoint was successfully prepared with enhanced logging (Sysmon) and fully integrated with the Wazuh SIEM.
+
+The system is now ready for attack simulation and detection testing.
 
 --- 
 
