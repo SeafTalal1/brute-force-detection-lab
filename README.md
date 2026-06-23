@@ -1,18 +1,159 @@
 # Brute Force Detection Lab (Mini SOC)
 
+## Overview
+
+This project demonstrates the implementation of a mini Security Operations Center (SOC) lab to simulate and detect brute force attacks. The lab provides hands-on experience in monitoring, log analysis, and threat detection using a SIEM solution.
+
+---
+
 ## Objective
-Simulate and detect brute force attacks in a mini SOC environment using Wazuh SIEM.
+
+The objective of this project is to simulate brute force attack scenarios and analyze how these attacks can be detected using Wazuh SIEM. The project focuses on understanding log collection, event correlation, and alert generation.
+
+---
 
 ## Lab Architecture
-- Attacker: Kali Linux
-- Victim: Windows Machine
-- SIEM: Wazuh
 
-## Tools Used
-- Wazuh (SIEM)
-- Kali Linux
-- Windows
-- Sysmon (for logging)
+The lab environment consists of the following components:
+
+* **Attacker:** Kali Linux machine used to simulate brute force attacks
+* **Victim:** Windows machine acting as the target system
+* **SIEM:** Wazuh deployed on an Ubuntu server for monitoring and analysis
+
+---
+
+## Tools and Technologies
+
+* **Wazuh** – SIEM platform for log collection and threat detection
+* **Kali Linux** – Used for attack simulation
+* **Windows** – Target system
+* **Sysmon** – Provides detailed logging on Windows
+
+---
+
+## Lab Setup
+
+### 1. Wazuh Setup
+
+#### System Preparation
+
+The installation was performed on an Ubuntu Server. The system was updated before installation:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+---
+
+#### Download Installer
+
+The official Wazuh installation script was downloaded:
+
+```bash
+curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
+```
+
+---
+
+#### Install Wazuh (All-in-One)
+
+All components were installed on a single server using the all-in-one installation mode:
+
+```bash
+sudo bash wazuh-install.sh -a --ignore-check
+```
+
+> The `--ignore-check` flag was used because Ubuntu 24 is not officially supported in the installer yet.
+
+---
+
+#### Installed Components
+
+The installation script automatically deployed:
+
+* **Wazuh Manager** – Analyzes incoming logs
+* **Wazuh Indexer** – Stores and indexes logs (based on OpenSearch)
+* **Wazuh Dashboard** – Web interface for monitoring
+* **Filebeat** – For log forwarding
+
+---
+
+#### Service Verification
+
+All services were verified after installation:
+
+```bash
+sudo systemctl status wazuh-manager
+sudo systemctl status wazuh-indexer
+sudo systemctl status wazuh-dashboard
+```
+
+Each service should show an active (running) status.
+
+---
+
+#### Accessing the Dashboard
+
+The Wazuh dashboard was accessed through the browser using the server address:
+
+```
+https://<SERVER-IP>
+```
+
+A browser warning may appear due to a self-signed certificate. This can be safely ignored in a lab environment.
+
+---
+
+#### Authentication
+
+Default credentials:
+
+* Username: admin
+* Password: generated during installation
+
+---
+
+#### Password Reset (if needed)
+
+```bash
+sudo /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p 'NewStrongPassword!'
+```
+
+---
+
+#### Network Configuration
+
+The network mode was set to **Bridged Adapter** to allow access from the host machine.
+
+The server IP was verified using:
+
+```bash
+ip a
+```
+
+---
 
 ## Project Status
-In Progress
+
+* [x] Wazuh SIEM Installed
+* [x] Dashboard Accessible
+* [ ] Add Windows Agent
+* [ ] Simulate Brute Force Attack
+* [ ] Analyze Logs and Alerts
+
+---
+
+## Learning Outcomes
+
+* Understanding SIEM architecture (Manager, Indexer, Dashboard)
+* Hands-on experience with log collection and monitoring
+* Basic incident detection and troubleshooting
+* Network configuration in virtual environments
+
+---
+
+## Next Steps
+
+* Install Wazuh agent on Windows
+* Generate brute force attack scenarios using Kali Linux
+* Monitor and analyze alerts in Wazuh dashboard
