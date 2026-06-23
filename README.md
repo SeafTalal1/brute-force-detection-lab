@@ -165,11 +165,7 @@ sysmon.exe -i
 Verification
 
 Sysmon logs were verified using Event Viewer:
-
-* Applications and Services Logs
-* Microsoft
-* Windows
-* Sysmon
+* Applications and Services Logs > Microsoft > Windows > Sysmon
 ![wazuh dashboard](screenshots/eventvwr1.png)
 ![wazuh dashboard](screenshots/eventvwr2.png)
 
