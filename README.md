@@ -111,7 +111,7 @@ Default credentials:
 * Username: admin
 * Password: generated during installation
 
-![wazuh login page](screenshots/wazuh_login_page.png)
+![wazuh login page](screenshots/wazuh_login.png)
 
 ---
 
