@@ -111,7 +111,8 @@ Default credentials:
 * Username: admin
 * Password: generated during installation
 
-![wazuh login page](screenshots/wazuh_login_page.png)
+![wazuh login page](screenshots/wazuh_login.png)
+![wazuh dashboard](screenshots/wazuh_dashboard.png)
 
 ---
 
@@ -143,8 +144,39 @@ ip a
 * [ ] Simulate Brute Force Attack
 * [ ] Analyze Logs and Alerts
 
-![wazuh dashboard](screenshots/wazuh_dashboard.png)
 ---
+
+### 2. Windows Agent Preparation
+
+#### Installing Sysmon
+
+Sysmon was installed on the Windows machine to enhance system logging and provide detailed visibility into system activity.
+
+Steps performed:
+
+1. Downloaded Sysmon from the official Microsoft Sysinternals website  [ https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon ]
+2. Extracted the archive  
+3. Executed Sysmon with administrator privileges  
+
+```bash
+sysmon.exe -i
+```
+
+Verification
+
+Sysmon logs were verified using Event Viewer:
+
+* Applications and Services Logs
+* Microsoft
+* Windows
+* Sysmon
+![wazuh dashboard](screenshots/eventvwr1.png)
+![wazuh dashboard](screenshots/eventvwr2.png)
+
+The logs confirmed that Sysmon was successfully installed and actively collecting system events.
+
+
+--- 
 
 ## Learning Outcomes
 
