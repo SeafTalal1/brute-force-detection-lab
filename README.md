@@ -453,3 +453,55 @@ Configured both systems to synchronize their clocks and verified that both machi
 - Keep the Wazuh Manager IP address static to prevent connectivity issues.
 - Ensure the agent version is compatible with the Wazuh Manager version.
 - DHCP Reservation is an effective way to maintain a consistent server IP in a lab environment.
+
+---
+
+# Attack Simulation & Detection
+![Sysmon Events](screenshots/attack.jpeg)
+
+After successfully deploying the Wazuh SIEM platform and integrating the Windows endpoint, the next phase focuses on validating the monitoring pipeline by generating normal system activity before simulating malicious behavior.
+
+Establishing a baseline of legitimate activity is an essential step in security monitoring. It helps distinguish expected operating system behavior from suspicious or malicious events during later attack simulations.
+
+---
+
+## 1. Establishing Normal System Activity
+
+Before executing any attack scenarios, several common Windows commands were executed to generate legitimate system activity.
+
+The following commands were used:
+
+```cmd
+whoami
+hostname
+ipconfig
+net user
+```
+
+These commands generate Windows Security and Sysmon events that are collected by the Wazuh agent and forwarded to the Wazuh manager.
+
+The generated events were then verified from:
+
+```
+Wazuh Dashboard → Security Events → Events
+```
+
+This step confirmed that the complete logging pipeline was functioning correctly:
+
+```
+Windows Endpoint
+      │
+      ▼
+Sysmon
+      │
+      ▼
+Wazuh Agent
+      │
+      ▼
+Wazuh Manager
+      │
+      ▼
+Security Events
+```
+
+The dashboard successfully detected several normal administrative activities, including process creation and Windows account discovery events, confirming that the environment was ready for attack simulation.
