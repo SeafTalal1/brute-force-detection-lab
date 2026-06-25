@@ -522,3 +522,34 @@ Confirmed that the target machine was ready to accept incoming RDP connections
 This configuration allows the attacker machine (Kali Linux) to perform a controlled brute force attack against the Windows endpoint in the next phase of the lab.
 ![Sysmon Events](screenshots/remote_desktop_enabled.png)
 
+---
+
+---
+
+## 3. Verifying Remote Access Connectivity
+
+Before performing the brute force simulation, connectivity between the attacker machine (Kali Linux) and the target Windows machine was verified.
+
+An Nmap scan was performed to confirm that the Remote Desktop Protocol (RDP) service was accessible on the target host.
+
+```bash
+nmap -p 3389 192.168.1.10
+```
+
+The scan confirmed that TCP port **3389** was open and the RDP service was available, indicating that the target machine was ready for remote authentication attempts.
+
+![Nmap Scan](screenshots/nmap_scan.png)
+
+---
+
+## 4. Generating a Failed Authentication Event
+
+To verify that authentication events were being collected correctly before launching the brute force attack, a single Remote Desktop login attempt was performed using an incorrect password.
+
+The login attempt failed as expected, generating a Windows **Failed Logon** event (Event ID **4625**).
+
+The event was successfully collected by the Wazuh agent and forwarded to the Wazuh manager, where it appeared in the **Security Events** dashboard.
+
+This verification confirmed that the detection pipeline was functioning correctly and that failed authentication attempts were being monitored before proceeding with the attack simulation.
+
+![Failed Login Event](screenshots/login_failed.png)
