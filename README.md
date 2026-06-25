@@ -340,105 +340,6 @@ The system is now ready for attack simulation and detection testing.
 
 ---
 
-## Troubleshooting
-
-During the lab setup, several issues were encountered and resolved.
-
-### 1. Wazuh Agent Version Mismatch
-
-**Issue**
-
-The Windows agent failed to register with the manager.
-
-```
-ERROR: Agent version must be lower or equal to manager version
-```
-
-**Cause**
-
-The installed agent version (4.14.x) was newer than the Wazuh manager version (4.7.5).
-
-**Resolution**
-
-Installed the Wazuh Agent version **4.7.5**, matching the manager version.
-
----
-
-### 2. Agent Registration Failure
-
-**Issue**
-
-The agent registration failed due to duplicate entries.
-
-```
-ERROR: Duplicate agent name
-```
-
-**Cause**
-
-The agent had already been registered previously.
-
-**Resolution**
-
-Removed the existing agent from the Wazuh manager and registered it again using:
-
-```bash
-agent-auth.exe -m <WAZUH_SERVER_IP>
-```
-
----
-
-### 3. Agent Appeared as Disconnected
-
-**Issue**
-
-The agent appeared as **Disconnected** in the Wazuh dashboard even though the Windows service was running.
-
-**Cause**
-
-The Wazuh server received a new IP address after reboot because it was using DHCP. The Windows agent was still attempting to connect to the previous server IP.
-
-**Resolution**
-
-Checked the agent log file:
-
-```
-C:\Program Files (x86)\ossec-agent\logs\ossec.log
-```
-
-The logs showed that the agent was attempting to connect to the old server IP.
-
-Configured a **DHCP Reservation** on the router to permanently assign the Wazuh server the same IP address (`192.168.1.9`).
-
-After restarting the Wazuh agent service, the agent successfully reconnected and its status changed to **Active**.
-
----
-
-### 4. Time Synchronization
-
-**Issue**
-
-The Windows machine and the Wazuh server had different system times.
-
-**Cause**
-
-Different time synchronization settings on the virtual machines.
-
-**Resolution**
-
-Configured both systems to synchronize their clocks and verified that both machines were using the correct UTC time.
-
----
-
-### Lessons Learned
-
-- Always check the agent logs before reinstalling or reconfiguring Wazuh.
-- Keep the Wazuh Manager IP address static to prevent connectivity issues.
-- Ensure the agent version is compatible with the Wazuh Manager version.
-- DHCP Reservation is an effective way to maintain a consistent server IP in a lab environment.
-
----
-
 # Attack Simulation & Detection
 ![Sysmon Events](screenshots/attack.jpeg)
 
@@ -498,9 +399,9 @@ Before launching the attack, Remote Desktop Protocol (RDP) was enabled on the Wi
 
 Steps performed:
 
-Opened Settings → System → Remote Desktop
-Enabled Remote Desktop
-Confirmed that the target machine was ready to accept incoming RDP connections
+- Opened **Settings → System → Remote Desktop**
+- Enabled **Remote Desktop**
+- Confirmed that the target machine accepted incoming RDP connections
 
 This configuration allows the attacker machine (Kali Linux) to perform a controlled brute force attack against the Windows endpoint in the next phase of the lab.
 ![Sysmon Events](screenshots/remote_desktop_enabled.png)
@@ -610,3 +511,150 @@ This confirms that the complete monitoring pipeline successfully detected and re
 
 ![Brute Force Detection](screenshots/wazuh_detected_hydra_attack.png)
 
+--- 
+
+## Lab Topology
+
+                +----------------------+
+                |      Kali Linux      |
+                |      (Attacker)      |
+                +----------+-----------+
+                           |
+                           |
+                     RDP Brute Force
+                           |
+                           v
+                +----------------------+
+                |      Windows 10      |
+                |   Wazuh Agent         |
+                |   Sysmon              |
+                +----------+-----------+
+                           |
+                      Event Collection
+                           |
+                           v
+                +----------------------+
+                |      Wazuh SIEM       |
+                | Ubuntu Server         |
+                | Manager               |
+                | Indexer               |
+                | Dashboard             |
+                +----------------------+
+
+---
+
+## Troubleshooting
+
+During the lab setup, several issues were encountered and resolved.
+
+### 1. Wazuh Agent Version Mismatch
+
+**Issue**
+
+The Windows agent failed to register with the manager.
+
+```
+ERROR: Agent version must be lower or equal to manager version
+```
+
+**Cause**
+
+The installed agent version (4.14.x) was newer than the Wazuh manager version (4.7.5).
+
+**Resolution**
+
+Installed the Wazuh Agent version **4.7.5**, matching the manager version.
+
+---
+
+### 2. Agent Registration Failure
+
+**Issue**
+
+The agent registration failed due to duplicate entries.
+
+```
+ERROR: Duplicate agent name
+```
+
+**Cause**
+
+The agent had already been registered previously.
+
+**Resolution**
+
+Removed the existing agent from the Wazuh manager and registered it again using:
+
+```bash
+agent-auth.exe -m <WAZUH_SERVER_IP>
+```
+
+---
+
+### 3. Agent Appeared as Disconnected
+
+**Issue**
+
+The agent appeared as **Disconnected** in the Wazuh dashboard even though the Windows service was running.
+
+**Cause**
+
+The Wazuh server received a new IP address after reboot because it was using DHCP. The Windows agent was still attempting to connect to the previous server IP.
+
+**Resolution**
+
+Checked the agent log file:
+
+```
+C:\Program Files (x86)\ossec-agent\logs\ossec.log
+```
+
+The logs showed that the agent was attempting to connect to the old server IP.
+
+Configured a **DHCP Reservation** on the router to permanently assign the Wazuh server the same IP address (`192.168.1.9`).
+
+After restarting the Wazuh agent service, the agent successfully reconnected and its status changed to **Active**.
+
+---
+
+### 4. Time Synchronization
+
+**Issue**
+
+The Windows machine and the Wazuh server had different system times.
+
+**Cause**
+
+Different time synchronization settings on the virtual machines.
+
+**Resolution**
+
+Configured both systems to synchronize their clocks and verified that both machines were using the correct UTC time.
+
+---
+
+### 5. Kali Networking
+
+**Issue**
+
+The attacker machine could not communicate correctly with the Windows endpoint.
+
+**Cause**
+
+The virtual machine networking configuration prevented proper communication between the attacker and the target.
+
+**Resolution**
+
+Configured the Kali virtual machine to use the correct network adapter and verified connectivity using Nmap before launching the attack.
+
+---
+
+### Lessons Learned
+
+- Always check the agent logs before reinstalling or reconfiguring Wazuh.
+- Keep the Wazuh Manager IP address static to prevent connectivity issues.
+- Ensure the agent version is compatible with the Wazuh Manager version.
+- DHCP Reservation is an effective way to maintain a consistent server IP in a lab environment.
+
+---
+Completed, praise be to God 
