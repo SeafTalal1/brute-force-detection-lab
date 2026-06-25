@@ -255,6 +255,37 @@ Steps performed:
 
 ---
 
+### 3. Sysmon Integration Verification
+
+After configuring the Wazuh agent to collect Sysmon logs, the integration was verified from the Wazuh dashboard.
+
+Steps performed:
+
+1. Opened **Security Events → Events**
+2. Filtered events using:
+
+```text
+rule.groups:sysmon
+```
+
+3. Confirmed that Sysmon events were successfully ingested by Wazuh.
+
+The dashboard displayed multiple Sysmon-based detections, including:
+
+- Process creation events
+- Discovery activity
+- `net.exe` account discovery commands
+- Security-related behavioral detections
+
+This verification confirmed that:
+
+- Sysmon was successfully generating Windows events.
+- The Wazuh agent was collecting Sysmon logs.
+- The Wazuh manager was processing the events.
+- Detection rules were successfully generating security alerts.
+
+![Sysmon Events](screenshots/sysmon_events.png)
+
 6. Issues Encountered and Resolutions
 
 During the setup process, several issues were encountered and resolved:
