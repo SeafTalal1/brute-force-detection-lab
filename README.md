@@ -506,3 +506,19 @@ Security Events
 
 The dashboard successfully detected several normal administrative activities, including process creation and Windows account discovery events, confirming that the environment was ready for attack simulation.
 ![Sysmon Events](screenshots/detected_discovery.png)
+
+---
+
+2. Preparing the Target Machine
+
+Before launching the attack, Remote Desktop Protocol (RDP) was enabled on the Windows machine to simulate a realistic remote access scenario.
+
+Steps performed:
+
+Opened Settings → System → Remote Desktop
+Enabled Remote Desktop
+Confirmed that the target machine was ready to accept incoming RDP connections
+
+This configuration allows the attacker machine (Kali Linux) to perform a controlled brute force attack against the Windows endpoint in the next phase of the lab.
+![Sysmon Events](screenshots/remote_desktop_enabled.png)
+
