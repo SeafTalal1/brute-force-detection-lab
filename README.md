@@ -505,3 +505,4 @@ Security Events
 ```
 
 The dashboard successfully detected several normal administrative activities, including process creation and Windows account discovery events, confirming that the environment was ready for attack simulation.
+![Sysmon Events](screenshots/detected_discovery.png)
