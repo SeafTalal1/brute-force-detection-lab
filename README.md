@@ -553,3 +553,19 @@ The event was successfully collected by the Wazuh agent and forwarded to the Waz
 This verification confirmed that the detection pipeline was functioning correctly and that failed authentication attempts were being monitored before proceeding with the attack simulation.
 
 ![Failed Login Event](screenshots/login_failed.png)
+
+---
+
+## 5. Brute Force Attack
+
+To simulate a brute force attack, Hydra was used from the Kali Linux attacker machine to perform multiple Remote Desktop authentication attempts against the Windows endpoint.
+
+The attack generated multiple failed authentication events (Windows Event ID 4625), which were successfully collected by the Wazuh agent and forwarded to the Wazuh manager.
+
+Wazuh correlated the repeated authentication failures and generated a high-severity alert indicating multiple Windows logon failures.
+
+This demonstrates the platform's ability to detect repeated authentication attempts that may indicate a brute force attack.
+
+![Hydra](screenshots/hydra_attack.png)
+
+![Brute Force Detection](screenshots/wazuh_detected_hydra_attack.png)
