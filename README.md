@@ -1,7 +1,5 @@
 # Brute Force Detection Lab (Mini SOC)
 
-> **Professional Edition**
-
 ## Table of Contents
 - Overview
 - Objective
