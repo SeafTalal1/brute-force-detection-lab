@@ -183,7 +183,7 @@ Steps performed:
 3. Configured the agent to connect to the Wazuh manager using the server IP
 
 ```bash
-msiexec.exe /i wazuh-agent-4.7.5-1.msi WAZUH_MANAGER="192.168.1.9"
+msiexec.exe /i wazuh-agent-4.7.5-1.msi WAZUH_MANAGER="<SERVER-IP>"
 ```
 
 ---
@@ -197,7 +197,7 @@ Steps performed:
 3.1. Executed the following command on the Windows machine:
 
 ```bash
-"C:\Program Files (x86)\ossec-agent\agent-auth.exe" -m 192.168.1.9
+"C:\Program Files (x86)\ossec-agent\agent-auth.exe" -m <SERVER-IP>
 ```
 
 3.2. The agent requested and received a valid authentication key from the manager
@@ -303,3 +303,102 @@ The system is now ready for attack simulation and detection testing.
 * Install Wazuh agent on Windows
 * Generate brute force attack scenarios using Kali Linux
 * Monitor and analyze alerts in Wazuh dashboard
+
+---
+
+## Troubleshooting
+
+During the lab setup, several issues were encountered and resolved.
+
+### 1. Wazuh Agent Version Mismatch
+
+**Issue**
+
+The Windows agent failed to register with the manager.
+
+```
+ERROR: Agent version must be lower or equal to manager version
+```
+
+**Cause**
+
+The installed agent version (4.14.x) was newer than the Wazuh manager version (4.7.5).
+
+**Resolution**
+
+Installed the Wazuh Agent version **4.7.5**, matching the manager version.
+
+---
+
+### 2. Agent Registration Failure
+
+**Issue**
+
+The agent registration failed due to duplicate entries.
+
+```
+ERROR: Duplicate agent name
+```
+
+**Cause**
+
+The agent had already been registered previously.
+
+**Resolution**
+
+Removed the existing agent from the Wazuh manager and registered it again using:
+
+```bash
+agent-auth.exe -m <WAZUH_SERVER_IP>
+```
+
+---
+
+### 3. Agent Appeared as Disconnected
+
+**Issue**
+
+The agent appeared as **Disconnected** in the Wazuh dashboard even though the Windows service was running.
+
+**Cause**
+
+The Wazuh server received a new IP address after reboot because it was using DHCP. The Windows agent was still attempting to connect to the previous server IP.
+
+**Resolution**
+
+Checked the agent log file:
+
+```
+C:\Program Files (x86)\ossec-agent\logs\ossec.log
+```
+
+The logs showed that the agent was attempting to connect to the old server IP.
+
+Configured a **DHCP Reservation** on the router to permanently assign the Wazuh server the same IP address (`192.168.1.9`).
+
+After restarting the Wazuh agent service, the agent successfully reconnected and its status changed to **Active**.
+
+---
+
+### 4. Time Synchronization
+
+**Issue**
+
+The Windows machine and the Wazuh server had different system times.
+
+**Cause**
+
+Different time synchronization settings on the virtual machines.
+
+**Resolution**
+
+Configured both systems to synchronize their clocks and verified that both machines were using the correct UTC time.
+
+---
+
+### Lessons Learned
+
+- Always check the agent logs before reinstalling or reconfiguring Wazuh.
+- Keep the Wazuh Manager IP address static to prevent connectivity issues.
+- Ensure the agent version is compatible with the Wazuh Manager version.
+- DHCP Reservation is an effective way to maintain a consistent server IP in a lab environment.
