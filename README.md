@@ -338,23 +338,6 @@ The Windows endpoint was successfully prepared with enhanced logging (Sysmon) an
 
 The system is now ready for attack simulation and detection testing.
 
---- 
-
-## Learning Outcomes
-
-* Understanding SIEM architecture (Manager, Indexer, Dashboard)
-* Hands-on experience with log collection and monitoring
-* Basic incident detection and troubleshooting
-* Network configuration in virtual environments
-
----
-
-## Next Steps
-
-* Install Wazuh agent on Windows
-* Generate brute force attack scenarios using Kali Linux
-* Monitor and analyze alerts in Wazuh dashboard
-
 ---
 
 ## Troubleshooting
@@ -524,8 +507,6 @@ This configuration allows the attacker machine (Kali Linux) to perform a control
 
 ---
 
----
-
 ## 3. Verifying Remote Access Connectivity
 
 Before performing the brute force simulation, connectivity between the attacker machine (Kali Linux) and the target Windows machine was verified.
@@ -556,16 +537,76 @@ This verification confirmed that the detection pipeline was functioning correctl
 
 ---
 
-## 5. Brute Force Attack
+---
 
-To simulate a brute force attack, Hydra was used from the Kali Linux attacker machine to perform multiple Remote Desktop authentication attempts against the Windows endpoint.
+## 5. Simulating a Brute Force Attack
 
-The attack generated multiple failed authentication events (Windows Event ID 4625), which were successfully collected by the Wazuh agent and forwarded to the Wazuh manager.
+After verifying that failed authentication events were successfully detected by Wazuh, a controlled brute force attack was performed from the Kali Linux attacker machine against the Windows endpoint.
 
-Wazuh correlated the repeated authentication failures and generated a high-severity alert indicating multiple Windows logon failures.
+### Identifying the Target Account
 
-This demonstrates the platform's ability to detect repeated authentication attempts that may indicate a brute force attack.
+Before launching the attack, the username of the target Windows machine was identified using the following command:
+
+```cmd
+whoami
+```
+
+Example output:
+
+```text
+WIN10-AGENT\WIN10-AGENT
+```
+
+The identified account was used as the target username during the brute force simulation.
+
+---
+
+### Preparing the Password List
+
+A small password list was created on the Kali machine containing several incorrect passwords to simulate repeated authentication failures.
+
+Example:
+
+```text
+123456
+password
+admin
+qwerty
+welcome
+Test123
+```
+
+---
+
+### Launching the Attack
+
+Hydra was used to perform multiple RDP authentication attempts against the Windows endpoint using the identified username and the password list.
+Hydra was selected because it supports multiple authentication protocols, including RDP, and is commonly used during security assessments to evaluate password security.
+
+```bash
+hydra -l WIN10-AGENT -P passwords.txt rdp://192.168.1.10
+```
 
 ![Hydra](screenshots/hydra_attack.png)
 
+The objective of this simulation was **not** to compromise the target machine, but to generate multiple failed authentication events in order to validate Wazuh's detection capabilities.
+
+---
+
+## 6. Detection Results
+
+During the attack, Windows generated multiple failed logon events (Event ID **4625**) for each unsuccessful authentication attempt.
+
+The Wazuh agent collected these events and forwarded them to the Wazuh manager, where correlation rules detected the repeated authentication failures.
+
+Wazuh generated alerts including:
+
+* **Logon failure – Unknown user or bad password** (Rule ID **60122**)
+* **Multiple Windows logon failures** (Rule ID **60204**)
+
+The second alert demonstrates Wazuh's ability to correlate repeated authentication failures and identify behavior commonly associated with brute force attacks.
+
+This confirms that the complete monitoring pipeline successfully detected and reported the simulated attack in real time.
+
 ![Brute Force Detection](screenshots/wazuh_detected_hydra_attack.png)
+
