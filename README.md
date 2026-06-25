@@ -509,7 +509,7 @@ The dashboard successfully detected several normal administrative activities, in
 
 ---
 
-2. Preparing the Target Machine
+## 2. Preparing the Target Machine
 
 Before launching the attack, Remote Desktop Protocol (RDP) was enabled on the Windows machine to simulate a realistic remote access scenario.
 
