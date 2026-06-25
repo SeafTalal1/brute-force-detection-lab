@@ -1,5 +1,25 @@
 # Brute Force Detection Lab (Mini SOC)
 
+> **Professional Edition**
+
+## Table of Contents
+- Overview
+- Objective
+- Lab Architecture
+- Tools and Technologies
+- Lab Setup
+  - Wazuh Installation
+  - Windows Preparation
+  - Sysmon Installation
+  - Wazuh Agent Installation
+  - Agent Registration
+  - Connectivity Verification
+- Troubleshooting
+- Learning Outcomes
+- Next Steps
+
+---
+
 ## Overview
 
 This project demonstrates the implementation of a mini Security Operations Center (SOC) lab to simulate and detect brute force attacks. The lab provides hands-on experience in monitoring, log analysis, and threat detection using a SIEM solution.
@@ -172,7 +192,7 @@ Sysmon logs were verified using Event Viewer:
 
 The logs confirmed that Sysmon was successfully installed and actively collecting system events.
 
-### 2. Wazuh Agent Installation
+### Wazuh Agent Installation
 
 The Wazuh agent was installed on the Windows machine to enable log collection and communication with the Wazuh manager.
 
@@ -188,7 +208,7 @@ msiexec.exe /i wazuh-agent-4.7.5-1.msi WAZUH_MANAGER="<SERVER-IP>"
 
 ---
 
-3. Agent Registration and Authentication
+### Agent Registration and Authentication
 
 The agent was registered with the Wazuh manager using the automatic authentication method.
 
@@ -214,7 +234,7 @@ This confirmed that the agent was successfully authenticated and registered.
 
 ---
 
-4. Starting the Wazuh Agent Service
+### Starting the Wazuh Agent Service
 
 After successful registration, the agent service was restarted.
 
@@ -233,7 +253,7 @@ Verification:
 
 ---
 
-5. Agent Connectivity Verification
+### Agent Connectivity Verification
 
 The agent status was verified from the Wazuh dashboard.
 
@@ -255,7 +275,7 @@ Steps performed:
 
 ---
 
-### 3. Sysmon Integration Verification
+### Sysmon Integration Verification
 
 After configuring the Wazuh agent to collect Sysmon logs, the integration was verified from the Wazuh dashboard.
 
@@ -286,7 +306,7 @@ This verification confirmed that:
 
 ![Sysmon Events](screenshots/sysmon_events.png)
 
-6. Issues Encountered and Resolutions
+### Issues Encountered and Resolutions
 
 During the setup process, several issues were encountered and resolved:
 
